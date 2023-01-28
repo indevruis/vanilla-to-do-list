@@ -10,17 +10,19 @@ const handleAddListBtn = (event) => {
     const $newToDo = $toDoInput.value;
     $toDoInput.value = '';
 
-    saveToDo($newToDo);
-    toDos.push($newToDo);
-    createToDoList($newToDo);
+    const newToDoObj = {
+        text: $newToDo,
+        id: Date.now(),
+    }
+
+    toDos.push(newToDoObj);
+    createToDoList(newToDoObj);
+    saveToDos();
 }
 
-const saveToDo = () => {
-
-}
-
-const createToDoList = ($newToDo) => {
+const createToDoList = (newToDoObj) => {
     const $div = document.createElement('div');
+    $div.id = newToDoObj.id;
 
     const $checkBox = document.createElement('span');
     $checkBox.innerHTML = '⬜';
@@ -28,7 +30,7 @@ const createToDoList = ($newToDo) => {
     $div.appendChild($checkBox);
 
     const $listContents = document.createElement('span');
-    $listContents.innerHTML = $newToDo;
+    $listContents.innerHTML = newToDoObj.text;
     $div.appendChild($listContents);
     
     const $deleteBtn = document.createElement('span');
@@ -36,6 +38,7 @@ const createToDoList = ($newToDo) => {
     $deleteBtn.className = 'deleteButton';
     $deleteBtn.addEventListener('click', handleDeleteBtn);
     $div.appendChild($deleteBtn);
+
     $toDoList.appendChild($div);
 }
 
@@ -44,8 +47,22 @@ const handleCheckBox = (event) => {
 }
 
 const handleDeleteBtn = (event) => {
-    const div = event.target.parentElement;
-    div.remove();
+    const $div = event.target.parentElement;
+    $div.remove();
+    toDos = toDos.filter(toDo => toDo.id !== parseInt($div.id));
+    saveToDos();
+}
+
+const saveToDos = () => {
+    localStorage.setItem('toDos', JSON.stringify(toDos));
+}
+
+const $savedToDos = localStorage.getItem('toDos');
+
+if($savedToDos !== null) {
+    const $parsedToDos = JSON.parse($savedToDos);
+    toDos = $parsedToDos;
+    $parsedToDos.forEach(createToDoList);
 }
 
 $addListBtn.addEventListener('click', handleAddListBtn);
