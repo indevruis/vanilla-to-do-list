@@ -5,12 +5,13 @@ const $addListBtn = document.querySelector('.addListBtn');
 let toDos = [];
 
 const handleAddList = () => {
-    const $newToDo = $toDoInput.value;
+    const newToDo = $toDoInput.value;
     $toDoInput.value = '';
 
     const newToDoObj = {
-        text: $newToDo,
-        id: Date.now(),
+        text: newToDo,
+        id: Date.now(), // 1674999068090
+        check: false,
     }
 
     toDos.push(newToDoObj);
@@ -24,7 +25,8 @@ const createToDoList = (newToDoObj) => {
 
     const $checkBox = document.createElement('span');
     $checkBox.innerHTML = '⬜';
-    $checkBox.addEventListener('click', handleCheckBox);
+    $checkBox.check = newToDoObj.check;
+    $checkBox.addEventListener('click', handleCheckBox(newToDoObj));
     $div.appendChild($checkBox);
 
     const $listContents = document.createElement('span');
@@ -40,9 +42,14 @@ const createToDoList = (newToDoObj) => {
     $toDoList.appendChild($div);
 }
 
-const handleCheckBox = (event) => {
+const handleCheckBox = (newToDoObj) => (event) => {
     const $check = event.target;
     $check.innerHTML = $check.innerHTML === '✔' ? '⬜' : '✔';
+    
+    const index = toDos.findIndex((todo)=>todo.id === newToDoObj.id)
+    toDos[index].check = !toDos[index].check
+
+    saveToDos()
 }
 
 const handleDeleteBtn = (event) => {
