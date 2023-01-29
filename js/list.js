@@ -5,12 +5,13 @@ const $addListBtn = document.querySelector('.addListBtn');
 let toDos = [];
 
 const handleAddList = () => {
-    const $newToDo = $toDoInput.value;
+    const newToDo = $toDoInput.value;
     $toDoInput.value = '';
 
     const newToDoObj = {
-        text: $newToDo,
+        text: newToDo,
         id: Date.now(),
+        check: false,
     }
 
     toDos.push(newToDoObj);
@@ -23,8 +24,9 @@ const createToDoList = (newToDoObj) => {
     $div.id = newToDoObj.id;
 
     const $checkBox = document.createElement('span');
-    $checkBox.innerHTML = '⬜';
-    $checkBox.addEventListener('click', handleCheckBox);
+    $checkBox.innerHTML = newToDoObj.check ? '✔' : '⬜';
+    $checkBox.check = newToDoObj.check;
+    $checkBox.addEventListener('click', handleCheckBox(newToDoObj));
     $div.appendChild($checkBox);
 
     const $listContents = document.createElement('span');
@@ -40,9 +42,14 @@ const createToDoList = (newToDoObj) => {
     $toDoList.appendChild($div);
 }
 
-const handleCheckBox = (event) => {
+const handleCheckBox = (newToDoObj) => (event) => {
     const $check = event.target;
     $check.innerHTML = $check.innerHTML === '✔' ? '⬜' : '✔';
+    
+    const index = toDos.findIndex((todo)=>todo.id === newToDoObj.id);
+    toDos[index].check = !toDos[index].check;
+
+    saveToDos();
 }
 
 const handleDeleteBtn = (event) => {
@@ -56,10 +63,10 @@ const saveToDos = () => {
     localStorage.setItem('toDos', JSON.stringify(toDos));
 }
 
-const $savedToDos = localStorage.getItem('toDos');
+const savedToDos = localStorage.getItem('toDos');
 
-if($savedToDos !== null) {
-    const $parsedToDos = JSON.parse($savedToDos);
+if(savedToDos !== null) {
+    const $parsedToDos = JSON.parse(savedToDos);
     toDos = $parsedToDos;
     $parsedToDos.forEach(createToDoList);
 }
