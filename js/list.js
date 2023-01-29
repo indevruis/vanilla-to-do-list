@@ -1,7 +1,6 @@
 const $toDoList = document.querySelector('.list');
 const $toDoInput = document.querySelector('.addListContents');
 const $addListBtn = document.querySelector('.addListBtn');
-const $addList = document.querySelector('.addListContents');
 
 let toDos = [];
 
@@ -73,6 +72,6 @@ if($savedToDos !== null) {
 }
 
 $addListBtn.addEventListener('click', handleAddList);
-$addList.addEventListener('keyup', (e) => {
+$toDoInput.addEventListener('keyup', (e) => {
     if(e.keyCode === 13) handleAddList();
 });
