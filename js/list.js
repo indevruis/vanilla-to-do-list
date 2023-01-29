@@ -23,7 +23,6 @@ const createToDoList = (newToDoObj) => {
     $div.id = newToDoObj.id;
 
     const $checkBox = document.createElement('span');
-    $checkBox.value = 'unchecked';
     $checkBox.innerHTML = '⬜';
     $checkBox.addEventListener('click', handleCheckBox);
     $div.appendChild($checkBox);
@@ -43,13 +42,7 @@ const createToDoList = (newToDoObj) => {
 
 const handleCheckBox = (event) => {
     const $check = event.target;
-    if($check.value === 'unchecked') {
-        $check.innerHTML = '✔';
-        $check.value = 'checked'
-    } else if($check.value === 'checked') {
-        $check.innerHTML = '⬜';
-        $check.value = 'unchecked';
-    }
+    $check.innerHTML = $check.innerHTML === '✔' ? '⬜' : '✔';
 }
 
 const handleDeleteBtn = (event) => {
