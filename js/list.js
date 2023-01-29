@@ -1,12 +1,11 @@
 const $toDoList = document.querySelector('.list');
 const $toDoInput = document.querySelector('.addListContents');
 const $addListBtn = document.querySelector('.addListBtn');
+const $addList = document.querySelector('.addListContents');
 
 let toDos = [];
 
-const handleAddListBtn = (event) => {
-    event.preventDefault();
-
+const handleAddList = () => {
     const $newToDo = $toDoInput.value;
     $toDoInput.value = '';
 
@@ -25,6 +24,7 @@ const createToDoList = (newToDoObj) => {
     $div.id = newToDoObj.id;
 
     const $checkBox = document.createElement('span');
+    $checkBox.value = 'unchecked';
     $checkBox.innerHTML = '⬜';
     $checkBox.addEventListener('click', handleCheckBox);
     $div.appendChild($checkBox);
@@ -43,7 +43,14 @@ const createToDoList = (newToDoObj) => {
 }
 
 const handleCheckBox = (event) => {
-    event.target.innerHTML = '✔';
+    const $check = event.target;
+    if($check.value === 'unchecked') {
+        $check.innerHTML = '✔';
+        $check.value = 'checked'
+    } else if($check.value === 'checked') {
+        $check.innerHTML = '⬜';
+        $check.value = 'unchecked';
+    }
 }
 
 const handleDeleteBtn = (event) => {
@@ -65,4 +72,7 @@ if($savedToDos !== null) {
     $parsedToDos.forEach(createToDoList);
 }
 
-$addListBtn.addEventListener('click', handleAddListBtn);
+$addListBtn.addEventListener('click', handleAddList);
+$addList.addEventListener('keyup', (e) => {
+    if(e.keyCode === 13) handleAddList();
+});
