@@ -43,8 +43,8 @@ const createToDoList = (newToDoObj) => {
 }
 
 const handleCheckBox = (newToDoObj) => (event) => {
-    const $check = event.target;
-    $check.innerHTML = $check.innerHTML === '✔' ? '⬜' : '✔';
+    const checked = event.target;
+    checked.innerHTML = checked.innerHTML === '✔' ? '⬜' : '✔';
     
     const index = toDos.findIndex((todo)=>todo.id === newToDoObj.id);
     toDos[index].check = !toDos[index].check;
@@ -53,9 +53,9 @@ const handleCheckBox = (newToDoObj) => (event) => {
 }
 
 const handleDeleteBtn = (event) => {
-    const $div = event.target.parentElement;
-    $div.remove();
-    toDos = toDos.filter(toDo => toDo.id !== parseInt($div.id));
+    const div = event.target.parentElement;
+    div.remove();
+    toDos = toDos.filter(toDo => toDo.id !== parseInt(div.id));
     saveToDos();
 }
 
@@ -66,9 +66,9 @@ const saveToDos = () => {
 const savedToDos = localStorage.getItem('toDos');
 
 if(savedToDos !== null) {
-    const $parsedToDos = JSON.parse(savedToDos);
-    toDos = $parsedToDos;
-    $parsedToDos.forEach(createToDoList);
+    const parsedToDos = JSON.parse(savedToDos);
+    toDos = parsedToDos;
+    parsedToDos.forEach(createToDoList);
 }
 
 $addListBtn.addEventListener('click', handleAddList);
